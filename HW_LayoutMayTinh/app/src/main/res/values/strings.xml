@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">HW_LayoutMayTinh</string>
+    <string name="padding_default">16dp</string>
+</resources>
