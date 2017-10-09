@@ -22,13 +22,13 @@ public class DBManager extends SQLiteOpenHelper {
     public static String DESCRIPTION = "des";
     private Context context;
 
-    // tao DB
+    // tao database
     public DBManager(Context context) {
         super(context, DATABASE_NAME, null, 1);
         this.context = context;
     }
 
-    // tao DB
+    // tạo table trong database
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         Log.d(TAG, "onCreate: ");
@@ -46,12 +46,12 @@ public class DBManager extends SQLiteOpenHelper {
 
     }
 
+    // add
     public void addNotepad(NoteModel note) {
-        // cho phep mo db
+        // hàm getWritetableDatabase cho phép mình có thể mở DB và thay đổi dữ liệu trong đó
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        ContentValues values = new ContentValues(); // thêm dữ liệu vào bảng
-        Log.d(TAG, "addNotepad: TITLE:"+note.getTitle());
-        Log.d(TAG, "addNotepad: DES: "+note.getDescription());
+        ContentValues values = new ContentValues(); // phải dùng 1 đối tượng ContentValues để thêm dữ liệu vào bảng
+
         values.put(TITLE, note.getTitle());
         values.put(DESCRIPTION, note.getDescription());
 

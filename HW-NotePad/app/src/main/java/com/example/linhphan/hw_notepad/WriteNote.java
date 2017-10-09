@@ -35,7 +35,7 @@ public class WriteNote extends AppCompatActivity {
                 Toast.makeText(WriteNote.this, "Add Notepad successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(WriteNote.this,MainActivity.class);
                 startActivity(intent);
-                //finish();
+                finish();
 
             }
         });
