@@ -39,14 +39,12 @@ public class NoteAdapter extends ArrayAdapter<NoteModel> {
             convertView = LayoutInflater.from(context).inflate(resource,parent,false);
             viewHolder.title= convertView.findViewById(R.id.tv_title);
             viewHolder.description= convertView.findViewById(R.id.tv_description);
-
-            viewHolder.title.setText(listNote.get(position).getTitle());
-            viewHolder.description.setText(listNote.get(position).getDescription());
             convertView.setTag(viewHolder);
         }
         else
             viewHolder = (ViewHolder) convertView.getTag();
-
+        viewHolder.title.setText(listNote.get(position).getTitle());
+        viewHolder.description.setText(listNote.get(position).getDescription());
         return convertView;
 
     }

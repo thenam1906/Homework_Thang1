@@ -27,7 +27,17 @@ public class DBManager extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, 1);
         this.context = context;
     }
-
+    public static DBManager dbManager;
+    public static DBManager getInstance(Context context)
+    {
+        if(dbManager==null)
+        {
+            DBManager dbManager = new DBManager(context);
+            return dbManager;
+        }
+        else
+            return dbManager;
+    }
     // tạo table trong database
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -59,7 +69,19 @@ public class DBManager extends SQLiteOpenHelper {
         sqLiteDatabase.close();
 
     }
-
+    public void deleteNodepad(NoteModel noteModel)
+    {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.delete(TABLE,TITLE+"=?",new String[]{noteModel.getTitle()});
+     //   sqLiteDatabase.delete(TABLE, TITLE+"=?",new String[]{String.valueOf(noteModel.getTitle())});
+        sqLiteDatabase.close();
+    }
+    public void updateNotepad(NoteModel noteModel)
+    {
+        String sql="update TABLE set ID=132 where title = a";
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        //sqLiteDatabase.update();
+    }
     public ArrayList<NoteModel> getAllNote() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<NoteModel> listNote = new ArrayList<>();
