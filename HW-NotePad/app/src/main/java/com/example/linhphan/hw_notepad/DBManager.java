@@ -78,9 +78,12 @@ public class DBManager extends SQLiteOpenHelper {
     }
     public void updateNotepad(NoteModel noteModel)
     {
-        String sql="update TABLE set ID=132 where title = a";
+        //String sql = "update "+TABLE+" set "+DESCRIPTION+"='"+noteModel.getDescription()+"' where "+TITLE+"='"+noteModel.getTitle()+"' ";
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        //sqLiteDatabase.update();
+        ContentValues value = new ContentValues();
+        value.put("des",noteModel.getDescription());
+        sqLiteDatabase.update("NOTE",value,"title=?",new String[]{noteModel.getTitle()});
+        sqLiteDatabase.close();
     }
     public ArrayList<NoteModel> getAllNote() {
         SQLiteDatabase db = this.getReadableDatabase();

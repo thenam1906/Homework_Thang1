@@ -12,17 +12,28 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG ="MainActivity" ;
+    private static final String TAG = "MainActivity";
+    public static final String TITLE = "TITLE";
+    public static final String DES = "DES";
     private ListView lvNotepad;
-    private Button btOpen;
+    private Button ivOpen;
     private ArrayList<NoteModel> listNote;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         setupUI();
         addListener();
         initAdapter();
@@ -31,12 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private void initAdapter() {
         DBManager dbManager = new DBManager(this);
         listNote = dbManager.getAllNote();
-        Log.d(TAG, "initAdapter: "+listNote);
-        if (listNote!=null)
-        {
-
-            NoteAdapter adapter = new NoteAdapter(this,R.layout.item_list_notepad,listNote);
-          //  adapter.notifyDataSetChanged();
+        Log.d(TAG, "initAdapter: " + listNote);
+        if (listNote != null) {
+            NoteAdapter adapter = new NoteAdapter(this, R.layout.item_list_notepad, listNote);
             lvNotepad.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
@@ -45,13 +53,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addListener() {
-        btOpen.setOnClickListener(new View.OnClickListener() {
+        ivOpen.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,WriteNote.class);
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: Add");
+                Intent intent = new Intent(MainActivity.this, WriteNote.class);
                 startActivity(intent);
             }
         });
+       
         lvNotepad.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -60,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void initAlertDialog(final int i)
-    {
-        AlertDialog.Builder alBuilder = new AlertDialog.Builder(this);
+    public void initAlertDialog(final int i) {
+        final AlertDialog.Builder alBuilder = new AlertDialog.Builder(this);
         alBuilder.setTitle("Please select option");
+        
         alBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -76,13 +86,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(MainActivity.this, "Update", Toast.LENGTH_SHORT).show();
+                updateNote(i);
             }
         });
+       
         alBuilder.show();
+    }
+
+    public void updateNote(int position) {
+        String title = listNote.get(position).getTitle();
+        String des = listNote.get(position).getDescription();
+        Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
+        intent.putExtra(TITLE, title);
+        intent.putExtra(DES, des);
+        startActivity(intent);
     }
 
     private void setupUI() {
         lvNotepad = (ListView) findViewById(R.id.lv_notepad);
-        btOpen = (Button) findViewById(R.id.bt_Open);
+        ivOpen = (Button) findViewById(R.id.iv_Open);
     }
+
+
 }
