@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class DBManager extends SQLiteOpenHelper {
     private static final String TAG = "DBManager";
+
     public static String DATABASE_NAME = "ListNotePad";
     public static String TABLE = "NOTE";
     public static String TITLE = "title";
