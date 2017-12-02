@@ -40,13 +40,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        //// khi  gửi lên server 1 thông điệp thì server tra lai ta 1 message thong qua callbackManager qua on...
+        //// khi  gửi lên server 1 thông điệp thì server tra lai ta 1 message thong qua callbackManager qua onActivityResult...
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_main);
         setupUI();
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.example.thangpham.loginfb",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
 
+        } catch (NoSuchAlgorithmException e) {
+
+        }
         // gui len server 1 dang list ma thong tin muon xin nhu kieu email, profile, date, id....
-        loginButton.setReadPermissions(Arrays.asList("public_profile","email"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile"));
         setLoginFacebook();
     }
 
@@ -78,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
                 try {
+
                     profilePictureView.setProfileId(object.getString("id"));
                     tv_name.setText(object.getString("name"));
                 } catch (JSONException e) {
@@ -94,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupUI() {
         tv_name=findViewById(R.id.tv_name);
-        loginButton= findViewById(R.id.login_button);
         profilePictureView = findViewById(R.id.imageProfilePictureView);
+        loginButton= findViewById(R.id.login_button);
     }
 
     @Override
