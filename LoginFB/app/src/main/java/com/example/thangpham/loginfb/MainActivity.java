@@ -44,20 +44,6 @@ public class MainActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_main);
         setupUI();
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.example.thangpham.loginfb",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
         // gui len server 1 dang list ma thong tin muon xin nhu kieu email, profile, date, id....
         loginButton.setReadPermissions(Arrays.asList("public_profile"));
         setLoginFacebook();
