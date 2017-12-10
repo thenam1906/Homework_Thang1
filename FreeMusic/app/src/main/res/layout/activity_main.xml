@@ -2,25 +2,100 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_main_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rl_main"
     android:background="@color/colorPrimary"
     tools:context="com.example.thangpham.freemusic.activity.MainActivity">
 
-    <android.support.design.widget.TabLayout
-        android:background="@color/colorPrimary"
-        android:id="@+id/tab"
+    <RelativeLayout
+        android:id="@+id/rl_mini"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorLight"
+        android:visibility="gone">
 
-    </android.support.design.widget.TabLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/v_pager"
-        android:background="@color/colorPrimary"
-        android:layout_below="@+id/tab"
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sb_mini">
+
+            <ImageView
+                android:id="@+id/iv_top_song"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fb_mini"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="4dp"
+
+                app:fabSize="normal"
+                app:srcCompat="@drawable/ic_pause_black_24dp" />
+
+            <TextView
+                android:id="@+id/tv_song"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/iv_top_song"
+                android:layout_marginEnd="8dp"
+                android:layout_toEndOf="@id/iv_top_song"
+                android:layout_toStartOf="@+id/fb_mini"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="Songg"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_singer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_song"
+                android:layout_marginEnd="8dp"
+                android:layout_toEndOf="@id/iv_top_song"
+                android:layout_toStartOf="@+id/fb_mini"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Singer"
+                android:textColor="#7fffffff" />
+        </RelativeLayout>
+
+
+        <SeekBar
+            android:id="@+id/sb_mini"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:thumb="@null" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_mini">
 
-    </android.support.v4.view.ViewPager>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/v_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+
+            android:background="@color/colorPrimary"></android.support.v4.view.ViewPager>
+    </RelativeLayout>
+
 </RelativeLayout>

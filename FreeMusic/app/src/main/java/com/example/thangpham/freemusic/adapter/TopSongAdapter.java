@@ -2,6 +2,7 @@ package com.example.thangpham.freemusic.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.EventLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,11 @@ import android.widget.TextView;
 
 import com.example.thangpham.freemusic.R;
 import com.example.thangpham.freemusic.databases.TopSongModel;
+import com.example.thangpham.freemusic.events.OnClickTopSongEvent;
+import com.example.thangpham.freemusic.notification.MusicNotification;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -23,6 +28,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongViewHolder> {
     Context context;
+    View view;
     public List<TopSongModel> topSongModelList;
 
     public TopSongAdapter(Context context, List<TopSongModel> topSongModelList) {
@@ -58,12 +64,19 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
             ivSong = itemView.findViewById(R.id.iv_top_song);
             tvSong = itemView.findViewById(R.id.tv_song);
             tvSinger = itemView.findViewById(R.id.tv_singer);
+            view=itemView;
         }
-        public void setData(TopSongModel topSongModel)
+        public void setData(final TopSongModel topSongModel)
         {
             Picasso.with(context).load(topSongModel.getSmallImage()).transform(new CropCircleTransformation()).into(ivSong);
             tvSong.setText(topSongModel.getSong());
             tvSinger.setText(topSongModel.getSinger());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EventBus.getDefault().postSticky(new OnClickTopSongEvent(topSongModel));
+                }
+            });
         }
     }
 }

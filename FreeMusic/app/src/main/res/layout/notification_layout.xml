@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorLight"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/iv_top_song"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp" />
+
+    <ImageView
+        android:id="@+id/iv_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/iv_top_song"
+         />
+
+    <TextView
+        android:id="@+id/tv_song"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/iv_play"
+        android:layout_toEndOf="@+id/iv_top_song"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="Songg"
+        android:layout_marginTop="8dp"
+        android:textColor="#fff"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_singer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_song"
+        android:layout_toEndOf="@id/iv_top_song"
+        android:layout_toStartOf="@id/iv_play"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Singer"
+        android:textColor="#7fffffff" />
+</RelativeLayout>
