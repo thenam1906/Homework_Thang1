@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: "+getSupportFragmentManager().getBackStackEntryCount());
         if(getSupportFragmentManager().getBackStackEntryCount()!=0) // xem backStack co bao nhieu con fragment
         {
             super.onBackPressed();

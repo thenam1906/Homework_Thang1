@@ -129,9 +129,12 @@ public class MainPlayerFragment extends Fragment {
         MusicHandler.updateUIRealTime(sbTime,fab,ivLarge,tvCurrent,tvDuration);
     }
     private void downloadSong() {
-        String url = "https://tk-gx.herokuapp.com/api/audio?search_terms=thunder%20imagine%20dragons";
+
+        //String url = topSongModel.url;
+
         String songName = topSongModel.song;
         String singerName = topSongModel.singer;
+        String url = "https://tk-gx.herokuapp.com/api/audio?search_terms="+songName+" "+singerName+"";
         String fileName = songName +","+singerName;
         File file = getActivity().getExternalFilesDir("MusicDownload");
 

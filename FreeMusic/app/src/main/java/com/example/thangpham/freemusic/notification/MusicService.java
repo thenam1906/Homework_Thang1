@@ -23,7 +23,7 @@ public class MusicService extends Service {
     // chay vao day service dc goi
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand: "+"OK");
+
         MusicHandler.playPause();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -31,6 +31,7 @@ public class MusicService extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
+        Log.d(TAG, "onTaskRemoved: ");
         MusicNotification.builder.setOngoing(false);
         MusicNotification.notificationManager.cancelAll(); // k cancle dc nhung thang`` trong trang thai OnGoing
 

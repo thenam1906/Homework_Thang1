@@ -26,6 +26,7 @@ public class MusicNotification {
     public static NotificationCompat.Builder builder;
     public static final String TAG = "MusicNotification";
     public  static final int NOTIFICATION_ID=1;
+
     public static void setupNotification(Context context, TopSongModel topSongModel)
     {
         remoteViews = new RemoteViews(context.getPackageName(),R.layout.notification_layout);
@@ -34,23 +35,22 @@ public class MusicNotification {
         remoteViews.setImageViewResource(R.id.iv_play,R.drawable.ic_pause_black_24dp);
 
         Intent intent = new Intent(context, MainActivity.class);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
-
          builder = new NotificationCompat.Builder(context);
         builder.setSmallIcon(R.mipmap.ic_launcher)
                 .setContent(remoteViews)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(pendingIntent) // sự kiện khi bấm vào builder
                 .setOngoing(true);
-
         // quản lý noti ( quản lý việc, thông báo, update, add ,delete noti )
          notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
         Picasso.with(context).load(topSongModel.smallImage)
                 .transform(new CropCircleTransformation())
                 .into(remoteViews,R.id.iv_top_song,NOTIFICATION_ID,builder.build());
         setOnClickPlayPause(context);
         updateNotification();
         notificationManager.notify(NOTIFICATION_ID, builder.build());// sau khi load anhr xong moi notifi
+
 
     }
 
@@ -74,5 +74,6 @@ public class MusicNotification {
         // service là 1 con chay ngầm, k cần giao diện
         PendingIntent pendingIntent = PendingIntent.getService(context,0,intent,0);
         remoteViews.setOnClickPendingIntent(R.id.iv_play,pendingIntent);
+
     }
 }
