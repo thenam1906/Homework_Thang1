@@ -1,6 +1,7 @@
 package com.example.thangpham.freemusic.fragment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,12 +19,15 @@ import android.widget.Toast;
 
 import com.example.thangpham.freemusic.R;
 import com.example.thangpham.freemusic.adapter.TopSongAdapter;
+import com.example.thangpham.freemusic.databases.DatabaseHandler;
 import com.example.thangpham.freemusic.databases.MusicTypeModel;
 import com.example.thangpham.freemusic.databases.TopSongModel;
 import com.example.thangpham.freemusic.events.OnClickMusicTypeEvent;
+import com.example.thangpham.freemusic.events.OnUpdateRvFav;
 import com.example.thangpham.freemusic.network.MusicInterface;
 import com.example.thangpham.freemusic.network.RetrofitInstance;
 import com.example.thangpham.freemusic.network.TopSongResponseJSON;
+import com.google.android.exoplayer2.util.ColorParser;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -63,7 +67,7 @@ public class TopSongFragment extends Fragment {
     @BindView(R.id.app_bar)
     AppBarLayout appBarLayout;
     public TopSongAdapter topSongAdapter;
-    public List<TopSongModel> topSongModelList = new ArrayList<>();
+    public static List<TopSongModel> topSongModelList = new ArrayList<>();
     public MusicTypeModel musicTypeModel;
     public TopSongFragment() {
         // Required empty public constructor
@@ -96,6 +100,7 @@ public class TopSongFragment extends Fragment {
                             topSongModel.singer = entryJSONList.get(i).artist.label;
                             topSongModel.song = entryJSONList.get(i).name.label;
                             topSongModel.smallImage = entryJSONList.get(i).image.get(2).label;
+
                             topSongModelList.add(topSongModel);
                             topSongAdapter.notifyItemChanged(i);
                         }
@@ -148,6 +153,57 @@ public class TopSongFragment extends Fragment {
         rvTopSongs.setItemAnimator(new SlideInLeftAnimator());
         rvTopSongs.getItemAnimator().setAddDuration(300);
         avLoad.show();
-    }
 
+        if(musicTypeModel.isFavorite)
+        {
+            ivFavourite.setColorFilter(Color.RED);
+        }
+        else
+        {
+            ivFavourite.setColorFilter(Color.WHITE);
+        }
+
+        ivFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseHandler.updateFavourtie(musicTypeModel);
+                if(musicTypeModel.isFavorite)
+                {
+                    ivFavourite.setColorFilter(Color.RED);
+                }
+                else
+                {
+                    ivFavourite.setColorFilter(Color.WHITE);
+                }
+                EventBus.getDefault().postSticky(new OnUpdateRvFav());
+               // FavoriteFragment.adapter.notifyDataSetChanged();
+            }
+        });
+    }
+    public static TopSongModel getTopSongModelNext(TopSongModel topSongModel)
+    {
+        TopSongModel topSongModeNext=topSongModel;
+        for(int i=0;i<topSongModelList.size();i++)
+        {
+            if(topSongModel.getSong().equals(topSongModelList.get(i).getSong())&&i!=topSongModelList.size()-1)
+            {
+                topSongModeNext=topSongModelList.get(i+1);
+                break;
+            }
+        }
+        return topSongModeNext;
+    }
+    public static TopSongModel getTopSongModelPrevious(TopSongModel topSongModel)
+    {
+        TopSongModel topSongModePrevious=topSongModel;
+        for(int i=0;i<topSongModelList.size();i++)
+        {
+            if(topSongModel.getSong().equals(topSongModelList.get(i).getSong())&&i!=0)
+            {
+                topSongModePrevious=topSongModelList.get(i-1);
+                break;
+            }
+        }
+        return topSongModePrevious;
+    }
 }

@@ -29,7 +29,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongViewHolder> {
     Context context;
     View view;
-    public List<TopSongModel> topSongModelList;
+    public static List<TopSongModel> topSongModelList;
 
     public TopSongAdapter(Context context, List<TopSongModel> topSongModelList) {
         this.context = context;
@@ -79,4 +79,5 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
             });
         }
     }
+
 }

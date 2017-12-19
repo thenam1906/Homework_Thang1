@@ -51,7 +51,7 @@
                         android:padding="16dp"
                         android:id="@+id/iv_favourite"
                         android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_favorite_black_24dp"
+                        android:src="@drawable/favorite_white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.example.thangpham.freemusic.utils;
 
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -9,10 +10,14 @@ import android.widget.Toast;
 
 import com.example.thangpham.freemusic.R;
 import com.example.thangpham.freemusic.databases.TopSongModel;
+import com.example.thangpham.freemusic.events.OnClickTopSongEvent;
+import com.example.thangpham.freemusic.fragment.TopSongFragment;
 import com.example.thangpham.freemusic.network.MusicInterface;
 import com.example.thangpham.freemusic.network.RetrofitInstance;
 import com.example.thangpham.freemusic.network.SearchResponseJSON;
 import com.example.thangpham.freemusic.notification.MusicNotification;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.logging.Handler;
 
@@ -28,6 +33,7 @@ import retrofit2.Response;
 
 public class MusicHandler {
     public static HybridMediaPlayer hybridMediaPlayer;
+    private static final String TAG = "MusicHandler";
     private static boolean keepUpdating = true;
 
     public static void getSearchSong(final TopSongModel topSongModel, final Context context) {
@@ -38,7 +44,6 @@ public class MusicHandler {
                 if (response.code() == 200) {
                     topSongModel.url = response.body().data.url;
                     topSongModel.largeImage = response.body().data.thumbnail;
-
                     playMusic(context, topSongModel);
                     MusicNotification.setupNotification(context,topSongModel);
                 } else if (response.code() == 500) {
@@ -53,7 +58,7 @@ public class MusicHandler {
         });
     }
 
-    private static void playMusic(Context context, TopSongModel topSongModel) {
+    public static void playMusic(Context context, TopSongModel topSongModel) {
         // check xem đã nghe chưa, nếu nghe rồi thì dừng lại để bật bài khác
         if (hybridMediaPlayer != null) {
             hybridMediaPlayer.pause();
@@ -67,6 +72,7 @@ public class MusicHandler {
             @Override
             public void onPrepared(HybridMediaPlayer hybridMediaPlayer) {
                 hybridMediaPlayer.play();
+
             }
         });
 
@@ -80,10 +86,10 @@ public class MusicHandler {
         MusicNotification.updateNotification();
     }
 
-    public static void updateUIRealTime(final SeekBar seekBar, final FloatingActionButton floatingActionButton,
-                                        final ImageView imageView, final TextView tvCurrent, final TextView tvDuration) {
+    public static void updateUIRealTime(final Context context, final SeekBar seekBar, final FloatingActionButton floatingActionButton,
+                                        final ImageView imageView, final TextView tvCurrent, final TextView tvDuration, final TopSongModel topSongModel) {
         final android.os.Handler handler = new android.os.Handler();
-        Runnable runnable = new Runnable() {
+        final Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 //update UI
@@ -103,6 +109,16 @@ public class MusicHandler {
                         tvCurrent.setText(Utils.convertTime(hybridMediaPlayer.getCurrentPosition()));
                         tvDuration.setText(Utils.convertTime(hybridMediaPlayer.getDuration()));
                     }
+                   hybridMediaPlayer.setOnCompletionListener(new HybridMediaPlayer.OnCompletionListener() {
+                       @Override
+                       public void onCompletion(HybridMediaPlayer hybridMediaPlayer) {
+                           TopSongModel topSongModelNext = new TopSongFragment().getTopSongModelNext(topSongModel);
+                           MusicHandler.getSearchSong(topSongModelNext,context);
+                           EventBus.getDefault().postSticky(new OnClickTopSongEvent(topSongModelNext));
+
+                       }
+                   });
+
                 }
                 handler.postDelayed(this, 100); // sau 100ml chay lai vao ham run
             }
@@ -126,5 +142,6 @@ public class MusicHandler {
             }
         });
     }
+   
 
 }

@@ -59,7 +59,7 @@ public class DownloadFragment extends Fragment {
         listName = new ArrayList<>();
         if(listFile.length==0)
         {
-            Toast.makeText(getContext(), "No Files Found", Toast.LENGTH_SHORT).show();
+
         }
         else
         {

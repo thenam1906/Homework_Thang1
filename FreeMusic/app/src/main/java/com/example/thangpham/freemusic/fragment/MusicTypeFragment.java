@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.thangpham.freemusic.R;
 import com.example.thangpham.freemusic.adapter.MusicTypeAdapter;
+import com.example.thangpham.freemusic.databases.DatabaseHandler;
 import com.example.thangpham.freemusic.databases.MusicTypeModel;
 import com.example.thangpham.freemusic.network.MusicTypeResponseJSON;
 import com.example.thangpham.freemusic.network.MusicInterface;
@@ -32,6 +34,7 @@ import retrofit2.Response;
  */
 // recycle view phai co LayoutManagement va Adapter
 public class MusicTypeFragment extends Fragment {
+    private static final String TAG = "MusicTypeFragment";
     private Context context;
     MusicTypeAdapter musicTypeAdapter;
     @BindView(R.id.rv_musictype)
@@ -62,7 +65,19 @@ public class MusicTypeFragment extends Fragment {
             }
         });
         rvMusicType.setLayoutManager(gridLayoutManager);
-        loadData();
+
+        if(DatabaseHandler.getMusicTypes().size()==0)
+        {
+            loadData();
+        }
+        else
+        {
+            Log.d(TAG, "onCreateView: "+DatabaseHandler.getMusicTypes().size());
+            musicTypeModelList.addAll(DatabaseHandler.getMusicTypes());
+            // clear remove add thi moi nhan notify
+            musicTypeAdapter.notifyDataSetChanged();
+        }
+
         return view;
     }
     private void loadData()
@@ -84,6 +99,7 @@ public class MusicTypeFragment extends Fragment {
                             context.getPackageName()
                     );
                     musicTypeModelList.add(musicTypeModel);
+                        DatabaseHandler.addMusicType(musicTypeModel);
                 }
                 musicTypeAdapter.notifyDataSetChanged();
             }

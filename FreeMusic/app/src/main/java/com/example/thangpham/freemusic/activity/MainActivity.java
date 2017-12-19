@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         tvSong.setText(topSongModel.getSong());
         tvSinger.setText(topSongModel.getSinger());
         MusicHandler.getSearchSong(topSongModel,MainActivity.this);
-        MusicHandler.updateUIRealTime(seekBar,fbPlay,ivTopSong,null,null);
+        MusicHandler.updateUIRealTime(this,seekBar,fbPlay,ivTopSong,null,null,topSongModel);
 
     }
     private void setupUI() {

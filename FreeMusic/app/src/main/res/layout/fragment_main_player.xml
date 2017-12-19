@@ -43,7 +43,7 @@
             android:layout_below="@id/tv_song"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/iv_back"
-            android:text="Halsey"
+            android:text=""
             android:textColor="#80ffffff" />
     </RelativeLayout>
 
