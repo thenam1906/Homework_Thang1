@@ -87,6 +87,7 @@ public class TopSongFragment extends Fragment {
     }
     public void loadData()
     {
+        topSongModelList.clear();
         MusicInterface musicInterface = RetrofitInstance.getInstance().create(MusicInterface.class);
         musicInterface.getTopSong(musicTypeModel.id)
                 .enqueue(new Callback<TopSongResponseJSON>() {

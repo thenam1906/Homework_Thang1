@@ -15,6 +15,7 @@ import com.example.thangpham.freemusic.fragment.TopSongFragment;
 import com.example.thangpham.freemusic.network.MusicInterface;
 import com.example.thangpham.freemusic.network.RetrofitInstance;
 import com.example.thangpham.freemusic.network.SearchResponseJSON;
+import com.example.thangpham.freemusic.network.TrackListXML;
 import com.example.thangpham.freemusic.notification.MusicNotification;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,7 +46,6 @@ public class MusicHandler {
                     topSongModel.url = response.body().data.url;
                     topSongModel.largeImage = response.body().data.thumbnail;
                     playMusic(context, topSongModel);
-                    MusicNotification.setupNotification(context,topSongModel);
                 } else if (response.code() == 500) {
                     Toast.makeText(context, "Not found", Toast.LENGTH_SHORT).show();
                 }
@@ -58,23 +58,40 @@ public class MusicHandler {
         });
     }
 
-    public static void playMusic(Context context, TopSongModel topSongModel) {
-        // check xem đã nghe chưa, nếu nghe rồi thì dừng lại để bật bài khác
-        if (hybridMediaPlayer != null) {
-            hybridMediaPlayer.pause();
-            hybridMediaPlayer.release();
-        }
-        hybridMediaPlayer = HybridMediaPlayer.getInstance(context);
-        hybridMediaPlayer.setDataSource(topSongModel.url);
-        hybridMediaPlayer.prepare();  // đợi nó chuẩn bị
-        // chuẩn bị xong xuôi sẽ nhảy vào hàm này
-        hybridMediaPlayer.setOnPreparedListener(new HybridMediaPlayer.OnPreparedListener() {
+    public static void playMusic(final Context context, final TopSongModel topSongModel) {
+
+        MusicInterface musicInterface = RetrofitInstance.getInstanceXML().create(MusicInterface.class);
+        musicInterface.getXMLSong(topSongModel.url).enqueue(new Callback<TrackListXML>() {
             @Override
-            public void onPrepared(HybridMediaPlayer hybridMediaPlayer) {
-                hybridMediaPlayer.play();
+            public void onResponse(Call<TrackListXML> call, Response<TrackListXML> response) {
+                Log.d(TAG, "onResponse: "+response.body().track.location);
+
+                // check xem đã nghe chưa, nếu nghe rồi thì dừng lại để bật bài khác
+                if (hybridMediaPlayer != null) {
+                    hybridMediaPlayer.pause();
+                    hybridMediaPlayer.release();
+                }
+                hybridMediaPlayer = HybridMediaPlayer.getInstance(context);
+                hybridMediaPlayer.setDataSource(response.body().track.location);
+                hybridMediaPlayer.prepare();  // đợi nó chuẩn bị
+                // chuẩn bị xong xuôi sẽ nhảy vào hàm này
+                hybridMediaPlayer.setOnPreparedListener(new HybridMediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(HybridMediaPlayer hybridMediaPlayer) {
+                        hybridMediaPlayer.play();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call<TrackListXML> call, Throwable t) {
 
             }
         });
+        MusicNotification.setupNotification(context,topSongModel);
+
 
     }
 

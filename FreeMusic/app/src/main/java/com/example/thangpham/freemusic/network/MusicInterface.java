@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * Created by ThangPham on 11/15/2017.
@@ -18,6 +19,8 @@ public interface MusicInterface {
 
     @GET("https://tk-gx.herokuapp.com/api/audio")
     Call<SearchResponseJSON> getSearchSong(@Query("search_terms") String search);
-
+    // @Url: thay the ca url
+    @GET
+    Call<TrackListXML> getXMLSong(@Url String url);
 
 }

@@ -48,7 +48,7 @@ public class MusicNotification {
                 .transform(new CropCircleTransformation())
                 .into(remoteViews,R.id.iv_top_song,NOTIFICATION_ID,builder.build());
         setOnClickPlayPause(context);
-        updateNotification();
+//        updateNotification();
         notificationManager.notify(NOTIFICATION_ID, builder.build());// sau khi load anhr xong moi notifi
 
 
